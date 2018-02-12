@@ -3,14 +3,6 @@ import sys
 import random
 import requests
 
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
-import mysql_client as mc
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'key'))
-import INFO
-
-db = mc.MySQLClient(INFO.MYSQL_HOST, INFO.MYSQL_PORT, INFO.MYSQL_USERNAME, INFO.MYSQL_PASSWORD, INFO.MYSQL_UNIX_SOCKET, INFO.MYSQL_DBNAME)
-
 import zip_codes_info
 import food_generics_info
 
@@ -31,6 +23,11 @@ random.shuffle(USER_AGENTS)
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'scraper'))
 import url_scraper as us
+
+for zipcode in ZIP_CODES:
+    for foodGene in FOOD_GENERICS:
+        loc = SOURCE_URL + "/search?find_desc=" + foodGene + "&find_loc=" + str(zipcode)
+        print(loc)
 
 ua = random.choice(USER_AGENTS)
 result = us.scrape(ua, ZIP_CODES[0], FOOD_GENERICS[0])
