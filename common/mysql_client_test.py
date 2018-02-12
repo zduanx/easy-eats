@@ -4,17 +4,17 @@ import sys
 import time
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'key'))
-import INFO
+import ENV
 
 def basic_test1():
-    db = mc.MySQLClient(INFO.MYSQL_HOST, INFO.MYSQL_PORT, INFO.MYSQL_USERNAME, INFO.MYSQL_PASSWORD, INFO.MYSQL_UNIX_SOCKET, INFO.MYSQL_DBNAME)
+    db = mc.MySQLClient(ENV.MYSQL_HOST, ENV.MYSQL_PORT, ENV.MYSQL_USERNAME, ENV.MYSQL_PASSWORD, ENV.MYSQL_UNIX_SOCKET, ENV.MYSQL_DBNAME)
     db.disconnect()
     print("basic_test1 passed")
 
 def basic_test2():
-    db = mc.MySQLClient(INFO.MYSQL_HOST, INFO.MYSQL_PORT, INFO.MYSQL_USERNAME, INFO.MYSQL_PASSWORD, INFO.MYSQL_UNIX_SOCKET, INFO.MYSQL_DBNAME)
+    db = mc.MySQLClient(ENV.MYSQL_HOST, ENV.MYSQL_PORT, ENV.MYSQL_USERNAME, ENV.MYSQL_PASSWORD, ENV.MYSQL_UNIX_SOCKET, ENV.MYSQL_DBNAME)
     db.readall()
-    db.add_url("1234", "aaaaa")
+    db.add_url("1234")
     print(db.get_row_count())
     db.readall()
     db.delete_url("1234")
@@ -23,9 +23,9 @@ def basic_test2():
     print("basic_test2 passed")
 
 def basic_test3():
-    db = mc.MySQLClient(INFO.MYSQL_HOST, INFO.MYSQL_PORT, INFO.MYSQL_USERNAME, INFO.MYSQL_PASSWORD, INFO.MYSQL_UNIX_SOCKET, INFO.MYSQL_DBNAME)
+    db = mc.MySQLClient(ENV.MYSQL_HOST, ENV.MYSQL_PORT, ENV.MYSQL_USERNAME, ENV.MYSQL_PASSWORD, ENV.MYSQL_UNIX_SOCKET, ENV.MYSQL_DBNAME)
     db.delete_url("111")
-    db.add_url("111", "aaaaa")
+    db.add_url("111")
     db.readall()
     db.update_hashcode("1111", "hashcode")
     db.update_hashcode("111", "hashcode")
@@ -35,15 +35,15 @@ def basic_test3():
     print("basic_test3 passed")
 
 def basic_test4():
-    db = mc.MySQLClient(INFO.MYSQL_HOST, INFO.MYSQL_PORT, INFO.MYSQL_USERNAME, INFO.MYSQL_PASSWORD, INFO.MYSQL_UNIX_SOCKET, INFO.MYSQL_DBNAME)
+    db = mc.MySQLClient(ENV.MYSQL_HOST, ENV.MYSQL_PORT, ENV.MYSQL_USERNAME, ENV.MYSQL_PASSWORD, ENV.MYSQL_UNIX_SOCKET, ENV.MYSQL_DBNAME)
     db.delete_url("111")
     db.delete_url("222")
     db.delete_url("333")
     db.delete_url("444")
-    db.add_url("111", "aaaaa")
-    db.add_url("222", "aaaaa")
-    db.add_url("333", "aaaaa")
-    db.add_url("444", "aaaaa")
+    db.add_url("111")
+    db.add_url("222")
+    db.add_url("333")
+    db.add_url("444")
     db.update_hashcode("333", "hashcode")
     db.update_hashcode("444", "hashcode")
     db.readall()

@@ -4,3 +4,6 @@ MYSQL_USERNAME = "zduan"
 MYSQL_PASSWORD = "11111111"
 MYSQL_UNIX_SOCKET = "/var/run/mysqld/mysqld.sock"
 MYSQL_DBNAME = "foodrecom"
+
+CRAWLING_SERVER_HOST = "localhost"
+CRAWLING_SERVER_PORT = 4040

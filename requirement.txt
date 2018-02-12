@@ -1,1 +1,3 @@
+Flask
+jsonrpclib-pelix
 PyMySQL

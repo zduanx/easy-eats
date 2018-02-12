@@ -29,7 +29,7 @@ class MySQLClient:
         self.cur = self.conn.cursor()
         self.table_name = "crawler"
         self.job_limit = 50
-        self.COMMAND_insert = "INSERT INTO " + self.table_name + " (url, name, available_time) values (%s, %s, NOW())"
+        self.COMMAND_insert = "INSERT INTO " + self.table_name + " (url, available_time) values (%s, NOW())"
         self.COMMAND_delete = "DELETE FROM " + self.table_name + " WHERE url = %s"
         self.COMMAND_rowcount = "SELECT COUNT(*) FROM " + self.table_name
         self.COMMAND_updatehashcode = "UPDATE " + self.table_name + " SET status = 'idle', available_time = ADDDATE(NOW(), %s), hashcode = %s WHERE url = %s"
@@ -38,22 +38,21 @@ class MySQLClient:
         self.COMMAND_queryjobs = "SELECT url FROM " + self.table_name + " WHERE marker = %s"
         self.COMMAND_cleanupjobs = "UPDATE " + self.table_name + " SET marker = 0 WHERE marker = %s"
 
-    def add_url(self, url, name):        
+    def add_url(self, url):        
         """
         Note:
             add one url item to db
 
         Args:
             url: url path
-            name: restaurant name
 
         Returns:
             void
         """
 
         try:
-            self.cur.execute(self.COMMAND_insert, (url, name))
-            print(">>> ITEM %s %s inserted" % (url, name))
+            self.cur.execute(self.COMMAND_insert, (url))
+            print(">>> ITEM %s inserted" % (url))
         except (pymysql.err.ProgrammingError) as e1:
             print("!!! ERROR: " + str(e1))
         except (pymysql.err.IntegrityError) as e2:
