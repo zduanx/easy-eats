@@ -1,0 +1,16 @@
+food_generics = [
+"American",
+"Japanese",
+"Chinese",
+"Indian",
+"Italian",
+"Korean",
+"Mexican",
+"Mediterranean",
+"Vietnamese",
+"Thai",
+"French",
+"Bakeries",
+"Burgers",
+"Hawaiian",
+]

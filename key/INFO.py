@@ -1,0 +1,6 @@
+MYSQL_HOST = "127.0.0.1"
+MYSQL_PORT = 3309
+MYSQL_USERNAME = "zduan"
+MYSQL_PASSWORD = "11111111"
+MYSQL_UNIX_SOCKET = "/var/run/mysqld/mysqld.sock"
+MYSQL_DBNAME = "foodrecom"
