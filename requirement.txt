@@ -1,3 +1,4 @@
 Flask
 jsonrpclib-pelix
+lxml
 PyMySQL
