@@ -2,3 +2,4 @@ Flask
 jsonrpclib-pelix
 lxml
 PyMySQL
+pymongo

@@ -33,7 +33,7 @@ class MySQLClient:
         self.COMMAND_delete = "DELETE FROM " + self.table_name + " WHERE url = %s"
         self.COMMAND_rowcount = "SELECT COUNT(*) FROM " + self.table_name
         self.COMMAND_updatehashcode = "UPDATE " + self.table_name + " SET status = 'idle', available_time = ADDDATE(NOW(), %s), hashcode = %s WHERE url = %s"
-        self.COMMAND_setallidle = "UPDATE " + self.table_name + " SET status = 'idle', marker = 0"
+        self.COMMAND_setallidle = "UPDATE " + self.table_name + " SET status = 'idle', marker = 0, available_time = NOW()"
         self.COMMAND_lockjobs = "UPDATE " + self.table_name + " SET status = 'working', marker = %s WHERE status = 'idle' AND available_time < NOW() ORDER BY available_time LIMIT " + str(self.job_limit) 
         self.COMMAND_queryjobs = "SELECT url FROM " + self.table_name + " WHERE marker = %s"
         self.COMMAND_cleanupjobs = "UPDATE " + self.table_name + " SET marker = 0 WHERE marker = %s"
