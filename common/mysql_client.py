@@ -133,7 +133,7 @@ class MySQLClient:
         """
         try:
             self.cur.execute(self.COMMAND_updatehashcode, (7, hashcode, url))
-            print(">>> UPDATE for url: %s; status: idle" % (url))
+            print(">>> UPDATE for url: %s; status: idle; hashcode: %s" % (url, hashcode))
         except Exception as err:
             print("<<< " + str(err))
 

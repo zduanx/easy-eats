@@ -14,3 +14,7 @@ MONGO_DB_HOST = "localhost"
 MONGO_DB_PORT = 27017
 YELP_DB_NAME = "yelp-info"
 YELP_TABLE_NAME = "yelp"
+
+YELP_INFO_TASK_QUEUE_URL = "amqp://tgfywhzj:rGu2ImqiXK0PnjlgaiUcwJc0Arq5vo9-@donkey.rmq.cloudamqp.com/tgfywhzj"
+YELP_INFO_TASK_QUEUE_NAME = "yelp-info-recording-task-queue"
+SLEEP_SCRAPING_IN_SECONDS = 10

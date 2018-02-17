@@ -1,41 +1,52 @@
+# url = "https://www.yelp.com/biz/false-idol-san-diego?rh_count=8"
 import os
 import sys
-import time
 import random
-import requests
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'key'))
 import ENV
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
+import cloudAMQP_client
 import crawling_server_client as client
+import operations
+
 sys.path.append(os.path.join(os.path.dirname(__file__), 'scraper'))
-import url_scraper
+import page_scraper as ps
 
-import zip_codes_info
-import food_generics_info
 
-ZIP_CODES = zip_codes_info.zip_codes
-FOOD_GENERICS = food_generics_info.food_generics
+import json
+import datetime
+from pprint import pprint
 
 SOURCE_URL = "https://www.yelp.com"
 
-USER_AGENTS_FILE = os.path.join(os.path.dirname(__file__), '..', 'key', 'user_agents.txt')
-USER_AGENTS = []
+CLOUDAMQP_URL = ENV.YELP_INFO_TASK_QUEUE_URL
+CLOUDAMQP_NAME = ENV.YELP_INFO_TASK_QUEUE_NAME
 
-start_time = time.time()
+cloudAMQP_client = cloudAMQP_client.CloudAMQPClient(CLOUDAMQP_URL, CLOUDAMQP_NAME)
 
-with open(USER_AGENTS_FILE, 'rb') as uaf:
-    for ua in uaf.readlines():
-        if ua:
-            USER_AGENTS.append(ua.strip()[1:-1])
+USER_AGENTS = operations.get_user_agents()
 
-random.shuffle(USER_AGENTS)
-
-for zipcode in ZIP_CODES:
-    for foodGene in FOOD_GENERICS:
-        loc = SOURCE_URL + "/search?find_desc=" + foodGene + "&find_loc=" + str(zipcode)
+while True:
+    jobs = client.get_jobs()
+    if jobs is None:
+        cloudAMQP_client.sleep(ENV.SLEEP_SCRAPING_IN_SECONDS)
+        continue
+    
+    for url in jobs:
+        loc = SOURCE_URL + url + "?rh_count=8"
         ua = random.choice(USER_AGENTS)
-        urls = url_scraper.scrape(loc, ua)
-        client.add_items(urls)
-        time.sleep(ENV.SLEEP_CRAWLING_IN_SECONDS)
 
-print("--- seed_crawler executed %s seconds ---" % (time.time() - start_time))
+        """ start page scraping """
+        ret = ps.scrape(loc, url, ua)
+        if ret == {}:
+            print("!!! FATAL ERROR")
+            sys.exit()
+
+        cloudAMQP_client.sendMessage(ret)
+        client.update_hashcode(url, ret['hashcode'])
+
+        cloudAMQP_client.sleep(ENV.SLEEP_SCRAPING_IN_SECONDS)
+    
+    cloudAMQP_client.sleep(ENV.SLEEP_SCRAPING_IN_SECONDS)

@@ -17,3 +17,14 @@ def delete_items(urls):
 
 def count_items():
     return client.count_items()
+
+def get_jobs():
+    return client.get_jobs()
+
+def set_all_idle():
+    client.set_all_idle()
+    return
+
+def update_hashcode(url, hashcode):
+    client.update_hashcode(url, hashcode)
+    return

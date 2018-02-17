@@ -7,6 +7,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'key'))
 import ENV
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
 import crawling_server_client as client
+import operations
 sys.path.append(os.path.join(os.path.dirname(__file__), 'scraper'))
 import url_scraper
 
@@ -18,17 +19,9 @@ FOOD_GENERICS = food_generics_info.food_generics
 
 SOURCE_URL = "https://www.yelp.com"
 
-USER_AGENTS_FILE = os.path.join(os.path.dirname(__file__), '..', 'key', 'user_agents.txt')
-USER_AGENTS = []
+USER_AGENTS = operations.get_user_agents()
 
 start_time = time.time()
-
-with open(USER_AGENTS_FILE, 'rb') as uaf:
-    for ua in uaf.readlines():
-        if ua:
-            USER_AGENTS.append(ua.strip()[1:-1])
-
-random.shuffle(USER_AGENTS)
 
 for zipcode in ZIP_CODES:
     for foodGene in FOOD_GENERICS:
