@@ -3,3 +3,4 @@ jsonrpclib-pelix
 lxml
 PyMySQL
 pymongo
+bs4

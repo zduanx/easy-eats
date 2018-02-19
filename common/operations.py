@@ -13,3 +13,15 @@ def get_user_agents():
 
     random.shuffle(USER_AGENTS)
     return USER_AGENTS
+
+def get_proxies():
+    PROXIES_FILE = os.path.join(os.path.dirname(__file__), '..', 'key', 'proxies.txt')
+    PROXIES = []
+
+    with open(PROXIES_FILE, 'r') as pf:
+        for p in pf.readlines():
+            if p:
+                PROXIES.append(p.strip())
+
+    random.shuffle(PROXIES)
+    return PROXIES

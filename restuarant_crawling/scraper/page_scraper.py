@@ -7,6 +7,9 @@ GET_STAR_RATING = """//div[contains(@class, "rating-info")]//div[contains(@class
 GET_REVIEW_COUNT = """//div[contains(@class, "rating-info")]//span[contains(@class, "review-count")]/text()"""
 GET_KEY_WORDS = """//div[contains(@class, "biz-page-header")]//div[@class="price-category"]//span[@class="category-str-list"]//a/text()"""
 GET_HOURS = """//div[contains(@class, "biz-hours")]//table//tr/td[not(contains(@class, 'extra'))]"""
+GET_LOC = """//div[@class="mapbox"]//img/@src"""
+GET_IMG = """(//div[contains(@class, "showcase-photo-box")]//img/@src)[2]"""
+
 SCRAPER = [
     ["name", GET_NAME, True],
     ["address", GET_ADDRESS_XPATH, False],
@@ -16,7 +19,9 @@ SCRAPER = [
     ["rating", GET_STAR_RATING, True],
     ["count", GET_REVIEW_COUNT, True],
     ["keywords", GET_KEY_WORDS, False],
-    ["hours", GET_HOURS, False]
+    ["hours", GET_HOURS, False],
+    ["location", GET_LOC, True],
+    ["image", GET_IMG, True],
 ]
 
 import requests
@@ -39,13 +44,16 @@ def get_headers(user_agent):
     }
     return headers
 
-def scrape(url, identifier, user_agent):
+def scrape(url, identifier, user_agent, proxies=""):
     print(">>> scraping: " + url)
+    print(">>> user_agent: " + str(user_agent))
+    print(">>> proxies: " + str(proxies))
     info = {}
 
     try:
         session_request = requests.session()
-        response = session_request.get(url, headers=get_headers(user_agent))
+        proxies = {"http": proxies}
+        response = session_request.get(url, proxies=proxies, headers=get_headers(user_agent))
 
         tree = html.fromstring(response.content)
 
@@ -61,12 +69,22 @@ def scrape(url, identifier, user_agent):
                 vals = list(map(string_process, vals))
                 if isFlatten:
                     vals = vals[0]
+                
+                if name == "location":
+                    match = re.match(r'.*center=(\S+?)%2C(\S+?)&.*', vals)
+                    if not match:
+                        match = re.match(r'.*%7C(\S+?)%2C(\S+?)&.*', vals)
+                    vals = [match.group(1), match.group(2)]
+
                 info[name] = vals
 
     except Exception as err:
         print("<<< ERROR: " + str(err))
         return {}
-    
+
+    if "name" not in info.keys():
+        return {}
+
     hashcode = hashlib.md5(json.dumps(info, sort_keys=True).encode('utf-8')).hexdigest()
     info["hashcode"] = hashcode
 

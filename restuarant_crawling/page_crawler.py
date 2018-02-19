@@ -27,6 +27,7 @@ CLOUDAMQP_NAME = ENV.YELP_INFO_TASK_QUEUE_NAME
 cloudAMQP_client = cloudAMQP_client.CloudAMQPClient(CLOUDAMQP_URL, CLOUDAMQP_NAME)
 
 USER_AGENTS = operations.get_user_agents()
+PROXIES = operations.get_proxies()
 
 while True:
     jobs = client.get_jobs()
@@ -37,9 +38,10 @@ while True:
     for url in jobs:
         loc = SOURCE_URL + url + "?rh_count=8"
         ua = random.choice(USER_AGENTS)
+        proxy = random.choice(PROXIES)
 
         """ start page scraping """
-        ret = ps.scrape(loc, url, ua)
+        ret = ps.scrape(loc, url, ua, proxy)
         if ret == {}:
             print("!!! FATAL ERROR")
             sys.exit()
