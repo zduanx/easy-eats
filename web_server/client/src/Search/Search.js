@@ -3,6 +3,7 @@ import './Search.css';
 import wallimage from '../images/chicago.jpg';
 import {loadImage} from '../js/main';
 import { Link } from 'react-router-dom';
+import loading from '../images/loading.svg';
 class Profile extends Component {
   constructor(props){
     super(props);
@@ -23,7 +24,11 @@ class Profile extends Component {
       address: "",
       location: null,
       inputValue: "",
-      disable: false
+      disable: false,
+      distance: 0,
+      number: 0,
+      loading: false,
+      fetched: false
     }
   }
 
@@ -82,17 +87,66 @@ class Profile extends Component {
         });
       }).catch((err)=>this.setState({}));
   }
+
   updateInputValue(event){
     this.setState({inputValue: event.target.value});
     if(event.target.value <0 || event.target.value > 25){
       window.alert("please enter integer (1-25)");
-      this.setState({inputValue: ""})
+      this.setState({inputValue: ""});
     }
   }
 
 
   handleSelection(event){
     console.log(this.state.inputValue);
+    const distance = this.state.inputValue;
+    this.setState({distance: distance});
+    if(!this.state.inputValue || this.state.inputValue === "0"){
+      window.alert("please enter integer (1-25)");
+      this.setState({inputValue: ""});
+      return
+    }
+    this.setState({disable: true, loading: true});
+    this.preloadDatabase(distance);
+  }
+
+  preloadDatabase(distance){
+    const url = 'http://' + window.location.hostname + ':4000' +
+                '/preload'
+    
+    const request = new Request(
+      url,
+      {
+        method: 'POST',             
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.state.profile.email,
+          lang: this.state.location.lng,
+          lat: this.state.location.lat,
+          distance: distance
+        })
+      }
+    );
+
+    fetch(request).then(res =>{
+      if(res.status === 200){
+        return res.json();
+      } else {
+        window.alert("bad query Location");
+        this.setState({loading: false, disable: false});
+        return
+      }
+    }).then((res) => {
+        this.setState({
+          loading: false,
+          disable: false,
+          number: res.number,
+          fetched: true,
+        });
+      }).catch((err)=>this.setState({loading: false, disable: false}));
   }
 
   render() {
@@ -108,11 +162,15 @@ class Profile extends Component {
           </div>
         </div>
 
+        
+        {this.state.address && 
         <div className = "columns is-centered">
           <div className = "column">
-          <h3> {this.state.address} {this.state.location && JSON.stringify(this.state.location)}</h3>
+          <h3> {this.state.address} {this.state.location && JSON.stringify(this.state.location)} &nbsp;&nbsp;</h3>
+          <Link to="/profile" className="button is-primary"> change</Link>
           </div>
         </div>
+        }
         {!this.state.address && 
         <div className = "columns is-centered">
           <div className = "column">
@@ -129,6 +187,33 @@ class Profile extends Component {
           </div>
         </div>
         }
+
+        {this.state.fetched &&
+        <div className = "columns is-centered">
+          <div className = "column ">
+            <h3>Total <strong>{this.state.number} </strong> restaurants loaded for search</h3> 
+          </div>
+        </div>
+        }
+
+        {this.state.fetched && this.state.number != 0 && 
+        <div className = "columns is-centered">
+          <div className = "column ">
+            <h3>temp</h3>
+          </div>
+        </div>
+        }
+        
+        {this.state.loading &&
+        <div className = "columns is-centered">
+          <div className = "column ">
+             <img src={loading} alt="loading"/>
+          </div>
+        </div>
+        }
+
+
+
       </div>
       </div>
     </div>

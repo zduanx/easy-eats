@@ -7,6 +7,9 @@ const config = require('../../key/API_KEY.json');
 const API_PATH = "https://maps.googleapis.com/maps/api/geocode/json"
 const API_KEY = config.GOOGLE_API;
 
+const redisClient = require('../modules/redisClient');
+const TIME_OUT_IN_SECONDS = 60 * 60 * 24;
+
 router.get('/geoencode', function(req, res) {
   const query = req.query.location;
   if(!query){
@@ -33,5 +36,24 @@ router.get('/geoencode', function(req, res) {
     });
   }
 });
+
+router.post('/preload', (req, response)=> {
+  data = req.body;
+  redisClient.georadius(data.lang, data.lat, data.distance, (err, res)=>{
+    if(err){
+      response.status(400).send("INVALID QUERY");
+    }else{
+      redisClient.set(data.email, JSON.stringify(res), redisClient.redisPrint);
+      redisClient.expire(data.email, TIME_OUT_IN_SECONDS);
+      redisClient.get(data.email, (res)=> console.log(res));
+      result = {
+        number: res.length
+      }
+      response.json(result);
+    }
+  })
+});
+
+
 
 module.exports = router;

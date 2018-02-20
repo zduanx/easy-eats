@@ -41,13 +41,9 @@ function geoadd(long, lat, name, callback){
     })
 }
 
-function georadius(long, lat, distance){
+function georadius(long, lat, distance, callback){
     client.georadius('locations', long, lat, distance, "mi", (err, res)=>{
-        if(err){
-            console.log(err);
-            return
-        }
-        callback(res);
+        callback(err, res);
     })
 }
  
@@ -58,4 +54,5 @@ module.exports = {
     quit,
     redisPrint: redis.print,
     geoadd,
+    georadius,
 }
