@@ -20,16 +20,40 @@ var model = mongoose.model(YELP_TABLE_NAME, new Schema({
     'location': [String]
 }, {collection: YELP_TABLE_NAME}));
 
-// model.findOne({}, 'identifier location', (err, data)=>{})
+// model.findOne({}, (err, data)=>{console.log(JSON.stringify(data))})
 
-const cursor = model.find({}).cursor();
+const cursor1= model.find({}).cursor();
 
-cursor.on('data', data=>{
+cursor1.on('data', data=>{
+
     redisClient.geoadd(data.location[1], data.location[0], data.identifier, (name, res)=>{
         console.log(res);
         console.log(">>> added: " + name);
     });
+
+    handleData(JSON.stringify(data));
+
 })
 
-
-
+function handleData(inputString){
+    const data = JSON.parse(inputString);
+    let a = data.name
+    let b = ""
+    if(data.keywords){
+        b = data.keywords.join(" ")
+    }
+    let c = a + " " + b
+    const snapshot = {
+    name: data.name,
+    rating: data.rating,
+    count: data.count,
+    phone: data.phone,
+    image: data.image,
+    identifier: data.identifier,
+    matching: c
+    };
+    const snapshotstring = JSON.stringify(snapshot);
+    console.log(snapshotstring);
+    redisClient.set(data.identifier, snapshotstring, redisClient.redisPrint);
+    redisClient.expire(data.identifier, TIME_OUT_IN_SECONDS);
+}

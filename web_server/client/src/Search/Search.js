@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './Search.css';
 import wallimage from '../images/chicago.jpg';
 import {loadImage} from '../js/main';
-
+import { Link } from 'react-router-dom';
 class Profile extends Component {
   constructor(props){
     super(props);
@@ -19,6 +19,12 @@ class Profile extends Component {
                         background-image: url(${wallimage});
                     }`;
     document.body.appendChild(this.wallcss);
+    this.state = {
+      address: "",
+      location: null,
+      inputValue: "",
+      disable: false
+    }
   }
 
   componentDidMount(){
@@ -36,28 +42,94 @@ class Profile extends Component {
     if (!userProfile) {
       getProfile((err, profile) => {
         this.setState({ profile });
+        this.loadLocation(profile);
       });
     } else {
       this.setState({ profile: userProfile });
+      this.loadLocation(userProfile);
     }
   }
+  
+  loadLocation(profile){
+    const url = 'http://' + window.location.hostname + ':7000' +
+                '/getuserlocation'
+    
+    const request = new Request(
+      url,
+      {
+        method: 'POST',             
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: profile.email
+        })
+      }
+    );
+
+    fetch(request).then(res =>{
+      if(res.status === 200){
+        return res.json();
+      } else {
+        window.alert("bad query Location");
+      }
+    }).then((res) => {
+        res = JSON.parse(res);
+        this.setState({
+          address: res.address,
+          location: res.location.location
+        });
+      }).catch((err)=>this.setState({}));
+  }
+  updateInputValue(event){
+    this.setState({inputValue: event.target.value});
+    if(event.target.value <0 || event.target.value > 25){
+      window.alert("please enter integer (1-25)");
+      this.setState({inputValue: ""})
+    }
+  }
+
+
+  handleSelection(event){
+    console.log(this.state.inputValue);
+  }
+
   render() {
     const { profile } = this.state;
     return (
     <div>
       <div className="wallpaper" id="search-wallpaper" data-image={wallimage}></div>
       <div className="container">
-        <div className="profile-area">
-          <h1>{profile.name}</h1>
-          <div>
-            <img src={profile.picture} alt="profile" />
-            <div>
-              <h3> Nickname</h3>
-              <h3>{profile.nickname}</h3>
-            </div>
-            <pre>{JSON.stringify(profile, null, 2)}</pre>
+      <div className="search-header">
+        <div className = "columns ">
+          <div className = "column">
+            <h1>Welcome {profile.name}</h1>
           </div>
         </div>
+
+        <div className = "columns is-centered">
+          <div className = "column">
+          <h3> {this.state.address} {this.state.location && JSON.stringify(this.state.location)}</h3>
+          </div>
+        </div>
+        {!this.state.address && 
+        <div className = "columns is-centered">
+          <div className = "column">
+            <Link to="/profile" className="button is-primary"> Please register your address first!</Link>   
+          </div>
+        </div>
+        }
+        {this.state.address && 
+        <div className = "columns is-centered">
+          <div className = "column ">
+            <h3> Please type in the Range in miles: &nbsp;&nbsp; </h3> 
+            <input className="input" value={this.state.inputValue} onChange={(e)=>this.updateInputValue(e)} step="0.5" min="0.5" max="25" type="number" placeholder="distance in miles (1-25)mi"/>
+            <button className="button is-danger distance" disabled={this.state.disable} onClick={(e)=>this.handleSelection(e)}>GO</button>
+          </div>
+        </div>
+        }
+      </div>
       </div>
     </div>
     );
