@@ -57,6 +57,7 @@ class Profile extends Component {
             <div className="column is-8">
               <h1>{profile.name}</h1>
               <h3>{profile.nickname}</h3>
+              <h3>{profile.email}</h3>
             </div>
           </div>
         </div>
