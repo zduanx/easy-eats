@@ -12,13 +12,11 @@ sys.dont_write_bytecode = True
 # import common package in parent directory
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'key'))
 import ENV
+import API_KEY
+GOOGLE_API_KEY = API_KEY.GOOGLE_API
 
 GEO_SERVER_HOST = ENV.GEO_SERVER_HOST
 GEO_SERVER_PORT = ENV.GEO_SERVER_PORT
-
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
-import API_KEY
-GOOGLE_API_KEY = API_KEY.GOOGLE_API
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
 import mongodb_client
