@@ -52,7 +52,6 @@ class RestaurantPage extends Component {
       }
     );
 
-    console.log();
     fetch(request)
       .then((res) => res.json())
       .then( info =>{
@@ -60,7 +59,6 @@ class RestaurantPage extends Component {
           info: JSON.parse(info),
           fetching: false
         });
-        console.log(this.state.info);
       })
       .catch(()=>this.setState({
         isRender: false,
@@ -117,7 +115,7 @@ class RestaurantPage extends Component {
 
                 {isAuthenticated() && 
                   <div>
-                    <h3>You were here <h1>{this.state.footprint}</h1> times!</h3>
+                    <h3>You were here</h3> <h3><span className="rest-visit">{this.state.footprint}</span></h3> <h3> times!</h3>
                     <br/>
                     <button className="button is-primary">Ate Here Before!</button>
                     <br/>

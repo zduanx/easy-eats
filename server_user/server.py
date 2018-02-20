@@ -71,13 +71,14 @@ def get_user_info():
     if 'email' not in data:
         raise InvalidUsage("Invalid input", status_code=400)
     
+    db = mongodb_client.get_db(DB_NAME)
     try:
         result = dumps(db[TABLE_NAME].find_one({'email': data["email"]}))
-        data = result
+        if result != "null":
+            data = result
     except Exception as err:
         pass
 
-    print(data)
     return jsonify(data)
 
 if __name__ == '__main__':
