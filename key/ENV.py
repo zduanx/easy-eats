@@ -18,3 +18,6 @@ YELP_TABLE_NAME = "yelp"
 YELP_INFO_TASK_QUEUE_URL = "amqp://tgfywhzj:rGu2ImqiXK0PnjlgaiUcwJc0Arq5vo9-@donkey.rmq.cloudamqp.com/tgfywhzj"
 YELP_INFO_TASK_QUEUE_NAME = "yelp-info-recording-task-queue"
 SLEEP_SCRAPING_IN_SECONDS = 1
+
+RESTUARANT_INFO_SERVER_HOST = "localhost"
+RESTUARANT_INFO_SERVER_PORT = 5000
