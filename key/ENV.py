@@ -12,6 +12,7 @@ SLEEP_CRAWLING_IN_SECONDS = 2
 
 MONGO_DB_HOST = "localhost"
 MONGO_DB_PORT = 27017
+
 YELP_DB_NAME = "yelp-info"
 YELP_TABLE_NAME = "yelp"
 
