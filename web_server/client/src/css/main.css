@@ -1,0 +1,75 @@
+/* 1. Base */
+
+html {
+    font-family: "Quicksand", sans-serif;
+    font-size: 16px;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    min-height: 100vh;
+    min-width: 300px;
+    overflow-x: hidden;
+    text-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. Shared */
+
+html, body {
+  margin: 0;
+  min-height: 100vh;
+  color: #fff;
+} 
+
+.wallpaper,
+.picture-shadow,
+.picture-image {
+  display: block;
+  height: 100%;
+  left: 0;
+  top: 0;
+  width: 100%;
+}
+
+.wallpaper {
+  background-position: center;
+  background-size: cover;
+  opacity: 0.2;
+  position: fixed;
+}
+
+/* wall paper animation */
+@keyframes zoomOut {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+}
+
+
+.wallpaper
+{
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0, 0.5, 0, 1);
+  animation-fill-mode: both;
+}
+
+.wallpaper {
+  animation-timing-function: ease-out;
+}
+
+.wallpaper
+{
+  opacity: 0;
+}
+
+.wallpaper.is-loaded {
+  animation-name: zoomOut;
+}
+
+.wallpaper.is-loaded {
+  animation-delay: 700ms;
+}

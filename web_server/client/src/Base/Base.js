@@ -1,40 +1,50 @@
 import React from 'react';
-import Auth from '../Auth/Auth';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import './Base.css'
 
-
 class Base extends React.Component {
-    constructor(props){
-        super(props);
-        document.addEventListener('DOMContentLoaded', function () {
-            
-              // Get all "navbar-burger" elements
-              var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
-            
-              // Check if there are any navbar burgers
-              if ($navbarBurgers.length > 0) {
-            
-                // Add a click event on each of them
-                $navbarBurgers.forEach(function ($el) {
-                  $el.addEventListener('click', function () {
-            
-                    // Get the target from the "data-target" attribute
-                    var target = $el.dataset.target;
-                    var $target = document.getElementById(target);
-            
-                    // Toggle the class on both the "navbar-burger" and the "navbar-menu"
-                    $el.classList.toggle('is-active');
-                    $target.classList.toggle('is-active');
-            
-                  });
+    componentWillMount(){
+        document.addEventListener('DOMContentLoaded', this.toggleHandler);
+    }
+    toggleHandler(){
+        // Get all "navbar-burger" elements
+        var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+        
+        // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) {
+    
+            // Add a click event on each of them
+            $navbarBurgers.forEach(function ($el) {
+                $el.addEventListener('click', function () {
+        
+                // Get the target from the "data-target" attribute
+                var target = $el.dataset.target;
+                var $target = document.getElementById(target);
+        
+                // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+                $el.classList.toggle('is-active');
+                $target.classList.toggle('is-active');
+        
                 });
-              }
-            
             });
+        };
     }
 
+    componentWillUnmount(){
+        document.removeEventListener('DOMContentLoaded', this.toggleHandler);
+    }
+
+    Login() {
+        this.props.auth.login();
+    }
+
+    Logout() {
+        this.props.auth.logout();
+    }
+    
     render() {
+        const { isAuthenticated } = this.props.auth;
+
         return (
         <div>
             <nav className="navbar is-transparent">
@@ -52,42 +62,39 @@ class Base extends React.Component {
 
                 <div id="navMenu" className="navbar-menu">
                     <div className="navbar-start">
-                        <a className="navbar-item" href="/">
+                        <NavLink className="navbar-item" exact to="/" activeClassName="is-active">
                             Home
-                        </a>
+                        </NavLink>
+                        {
+                            isAuthenticated() && 
+                            <NavLink className="navbar-item" exact to="/search" activeClassName="is-active">
+                                Search
+                            </NavLink>
+                        }
                     </div>
 
+                    { !isAuthenticated() && 
                     <div className="navbar-end">
                         <div className="navbar-item">
-                            <div className="field is-grouped">
-                            <p className="control">
-                                <a className="bd-tw-button button" data-social-network="Twitter" data-social-action="tweet" data-social-target="http://localhost:4000" target="_blank" href="https://twitter.com/intent/tweet?text=Bulma: a modern CSS framework based on Flexbox&amp;hashtags=bulmaio&amp;url=http://localhost:4000&amp;via=jgthms">
-                                <span className="icon">
-                                    <i className="fab fa-twitter"></i>
-                                </span>
-                                <span>
-                                    Tweet
-                                </span>
-                                </a>
-                            </p>
-                            <p className="control">
-                                <a className="button is-primary" href="https://github.com/jgthms/bulma/archive/0.5.1.zip">
-                                <span className="icon">
-                                    <i className="fas fa-download"></i>
-                                </span>
-                                <span>Download</span>
-                                </a>
-                            </p>
-                            </div>
+                                <button className="button is-primary" onClick={()=>this.Login()}>
+                                    Sign in / Sign up
+                                </button>
                         </div>
-                    </div>
+                    </div>}
+                    { isAuthenticated() && 
+                    <div className="navbar-end">
+                        <NavLink className="navbar-item" exact to="/profile" activeClassName="is-active">
+                            Profile
+                        </NavLink>
+                        <div className="navbar-item">
+                            <button className="button is-primary" onClick={()=>this.Logout()}>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>}
                 </div>
             </div>
             </nav>
-
-
-            
-            {this.props.children}
         </div>
         );
     }

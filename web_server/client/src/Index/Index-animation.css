@@ -1,0 +1,156 @@
+@keyframes bounceIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fillUp {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes picImage {
+  from {
+    opacity: 0;
+    transform: scale(1.2) translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes picShadow {
+  from {
+    opacity: 0;
+    transform: scale(1.2) translateY(4rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.1) translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+}
+.picture-shadow,
+.picture-image,
+.name,
+.job,
+#hr,
+.description,
+.contact
+{
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0, 0.5, 0, 1);
+  animation-fill-mode: both;
+}
+
+.picture-shadow,
+.picture-image {
+  opacity: 0;
+}
+
+.picture-shadow,
+.picture-image {
+  animation-duration: 750ms;
+  /*animation-timing-function: cubic-bezier(0, 1, 0.75, 1.25);*/
+  /*animation-timing-function: cubic-bezier(0, 1, 0, 1.25);*/
+  /*animation-timing-function: cubic-bezier(0, 1, 0.25, 1.25);*/
+  animation-timing-function: cubic-bezier(0, 0.5, 0.25, 1.25);
+}
+
+.picture.is-loaded .picture-shadow {
+  animation-name: picShadow;
+}
+
+.picture.is-loaded .picture-image {
+  animation-name: picImage;
+}
+.name {
+  animation-name: slideDown;
+}
+
+.job {
+  animation-name: slideUp;
+}
+
+.hr {
+  animation-name: fillUp;
+}
+
+.description {
+  animation-name: slideUp;
+}
+
+.contact {
+  animation-name: bounceIn;
+}
+
+/* Delays */
+.name {
+  animation-delay: 100ms;
+}
+
+.job {
+  animation-delay: 200ms;
+}
+
+.hr {
+  animation-delay: 300ms;
+}
+
+.description {
+  animation-delay: 400ms;
+}
+
+.contact {
+  animation-delay: 600ms;
+}
+
+.picture.is-loaded .picture-image {
+  animation-delay: 500ms;
+}
+
+.picture.is-loaded .picture-shadow {
+  animation-delay: 500ms;
+}
