@@ -1,4 +1,5 @@
 Flask
+Flask-CORS
 jsonrpclib-pelix
 lxml
 PyMySQL

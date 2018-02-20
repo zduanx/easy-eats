@@ -3,6 +3,7 @@ import { Redirect, Route, Router, Switch } from 'react-router-dom';
 import Base from './Base/Base';
 import Index from './Index/Index'
 import Profile from './Profile/Profile';
+import RestaurantPage from './RestaurantPage/RestaurantPage';
 import Search from './Search/Search'
 import Nomatch from './Nomatch/Nomatch';
 import Callback from './Callback/Callback';
@@ -31,6 +32,7 @@ export const makeMainRoutes = () => {
               <Profile auth={auth}/>
             )
           )} />
+          <Route path={"/restaurants/:name"} exact render={(props) => <RestaurantPage auth={auth} {...props}/>} />
           <Route path="/search" render={(props) => (
             !auth.isAuthenticated() ? (
               <Redirect to="/"/>

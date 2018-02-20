@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import './Base.css'
+import logo from './Logo.png'
 
 class Base extends React.Component {
     componentWillMount(){
@@ -51,7 +52,7 @@ class Base extends React.Component {
             <div className="container">
                 <div className="navbar-brand">
                     <a className="navbar-item" href="/">
-                    <img src="Logo.png" alt="logo" width="112" height="28" />
+                    <img src={logo} alt="logo" width="112" height="28" />
                     </a>
                     <div className="navbar-burger burger" data-target="navMenu">
                     <span></span>
