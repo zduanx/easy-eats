@@ -2,3 +2,14 @@
     position:relative;
     z-index:1000;
 }
+
+.footer {
+    overflow: hidden;
+    bottom: 0;
+    width: 100%;
+    position: fixed;
+}
+
+.footer p {
+    color: black !important;
+}

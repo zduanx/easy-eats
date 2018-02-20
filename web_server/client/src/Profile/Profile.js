@@ -48,14 +48,16 @@ class Profile extends Component {
       <div className="wallpaper" id="profile-wallpaper" data-image={wallimage}></div>
       <div className="container">
         <div className="profile-area">
-          <h1>{profile.name}</h1>
-          <div>
-            <img src={profile.picture} alt="profile" />
-            <div>
-              <h3> Nickname</h3>
+          <div className="columns">
+            <div className="column is-1">
+            </div>
+            <div className="column is-3">
+              <img src={profile.picture} className="profile-image" alt="profile" />
+            </div>
+            <div className="column is-8">
+              <h1>{profile.name}</h1>
               <h3>{profile.nickname}</h3>
             </div>
-            <pre>{JSON.stringify(profile, null, 2)}</pre>
           </div>
         </div>
       </div>

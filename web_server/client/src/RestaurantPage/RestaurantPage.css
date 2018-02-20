@@ -8,3 +8,34 @@
 .rest-display p{
     color: white !important;
 }
+
+.rest-content{
+    margin-top:5em;
+}
+
+.food-img {
+  max-width: 150px;
+  margin-bottom: 20px;
+}
+
+.rest-content h1{
+    font-size: 2em;
+}
+
+.rest-content .yelp-button{
+    margin-top: 1em;
+}
+
+.rest-content .yelp-review {
+    margin-top: 2em;
+}
+
+.rest-content h2 {
+    font-size: 2em;
+}
+
+.rest-content hr { 
+    border : 0;
+    height: 1px; 
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0)); 
+}

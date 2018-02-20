@@ -3,3 +3,17 @@
   margin-bottom: 20px;
 }
 
+.profile-image {
+  border-radius: 50%
+}
+
+.profile-area {
+  margin-top: 30px;
+}
+
+.profile-area h1 {
+  font-size: 2em;
+}
+.profile-area h3 {
+  font-size: 1em;
+}
