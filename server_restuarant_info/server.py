@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from flask import Flask
 from flask import jsonify
 from flask import request
@@ -55,7 +56,7 @@ def hello():
 def get_restuarant_info(id):
     if id is None:
         raise InvalidUsage("No id found", status_code=400)
-    
+
     db = mongodb_client.get_db(DB_NAME)
     try:
         result = dumps(db[TABLE_NAME].find_one({'identifier': '/biz/' + id}))

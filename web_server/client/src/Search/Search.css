@@ -16,6 +16,15 @@
     max-width: 20% !important;
 }
 
+.search-header #searchinput {
+    max-width: 50% !important;
+}
+
 .search-header .distance {
     min-width: 5%;
+}
+
+.search-header strong {
+    color: white !important;
+    font-size: 1.5em
 }

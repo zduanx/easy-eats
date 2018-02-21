@@ -3,6 +3,7 @@ var router = express.Router();
 const nodeRestClient = require('node-rest-client').Client;
 const restClient = new nodeRestClient();
 const config = require('../../key/API_KEY.json');
+let strSim = require('string-similarity');
 
 const API_PATH = "https://maps.googleapis.com/maps/api/geocode/json"
 const API_KEY = config.GOOGLE_API;
@@ -54,6 +55,55 @@ router.post('/preload', (req, response)=> {
   })
 });
 
+router.post('/search', (req, response)=> {
+  reqbody = req.body;
+  const value = reqbody.value;
+  console.log(reqbody);
 
+  async function asyncForEach(array, callback) {
+    for(let index = 0; index < array.length; index++){
+      await callback(array[index], index, array);
+    }
+  }
+
+  redisClient.get(reqbody.email, data =>{
+
+    if(data){
+      const pool = JSON.parse(data);
+      let valid = [];
+      console.log(pool.length);
+
+      const start = async() =>{
+        await asyncForEach(pool, async (element)=>{
+          await new Promise((resolve, reject) =>{
+            redisClient.get(element, (val)=>{
+              const obj = JSON.parse(val);
+              const match = obj.matching;
+              const confidence = strSim.compareTwoStrings(value, match);
+              if(confidence > 0.2){
+                obj["confidence"] = confidence;
+                valid.push(obj);
+              }
+              resolve();
+            })
+          });
+        })
+        valid.sort((a,b)=>b.confidence - a.confidence);
+        redisClient.set('search-' + reqbody.email, JSON.stringify(valid), redisClient.redisPrint);
+        redisClient.expire('search-' + reqbody.email, TIME_OUT_IN_SECONDS);
+        const result = {
+          found: valid.length,
+          info: valid.slice(0, 10)
+        }
+        response.json(result);
+      }
+
+      start()
+
+    } else{
+      response.status(400).send("INVALID QUERY");
+    } 
+  })
+});
 
 module.exports = router;

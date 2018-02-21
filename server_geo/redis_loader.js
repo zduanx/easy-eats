@@ -50,6 +50,7 @@ function handleData(inputString){
     phone: data.phone,
     image: data.image,
     identifier: data.identifier,
+    keywords: data.keywords,
     matching: c
     };
     const snapshotstring = JSON.stringify(snapshot);

@@ -4,6 +4,8 @@ import wallimage from '../images/chicago.jpg';
 import {loadImage} from '../js/main';
 import { Link } from 'react-router-dom';
 import loading from '../images/loading.svg';
+import RestuarantCard from '../RestuarantCard/RestuarantCard';
+
 class Profile extends Component {
   constructor(props){
     super(props);
@@ -24,11 +26,14 @@ class Profile extends Component {
       address: "",
       location: null,
       inputValue: "",
+      searchValue: "",
       disable: false,
       distance: 0,
       number: 0,
+      found: 0,
       loading: false,
-      fetched: false
+      fetched: false,
+      info: null,
     }
   }
 
@@ -96,6 +101,9 @@ class Profile extends Component {
     }
   }
 
+  updateSearchValue(event){
+    this.setState({searchValue: event.target.value});
+  }
 
   handleSelection(event){
     console.log(this.state.inputValue);
@@ -106,9 +114,56 @@ class Profile extends Component {
       this.setState({inputValue: ""});
       return
     }
-    this.setState({disable: true, loading: true});
+    this.setState({disable: true, loading: true, info: null});
     this.preloadDatabase(distance);
   }
+
+  sendSearchValue(event){
+    if(event.key === 'Enter'){
+      this.handleSearchValue(this.state.searchValue);
+    }
+  }
+
+  handleSearchValue(value){
+    this.setState({loading: true, disable: true});
+    const url = 'http://' + window.location.hostname + ':4000' +
+                '/search'
+    
+    const request = new Request(
+      url,
+      {
+        method: 'POST',             
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.state.profile.email,
+          value: value
+        })
+      }
+    );
+
+    fetch(request).then(res =>{
+      if(res.status === 200){
+        return res.json();
+      } else {
+        window.alert("bad query Location");
+        this.setState({loading: false, disable: false, info: null});
+        return
+      }
+    }).then((res) => {
+      console.log(res);
+        this.setState({
+          loading: false,
+          disable: false,
+          info: res.info,
+          found: res.found
+        });
+      }).catch((err)=>this.setState({loading: false, disable: false, info: null}));
+
+  }
+
 
   preloadDatabase(distance){
     const url = 'http://' + window.location.hostname + ':4000' +
@@ -149,8 +204,31 @@ class Profile extends Component {
       }).catch((err)=>this.setState({loading: false, disable: false}));
   }
 
+  renderInfo(){
+    const obj = this.state.info;
+    const info_list = obj.map(info => {
+      return(
+          <div className = "column is-6">
+            <RestuarantCard key={Math.random()} info={info} />
+          </div>
+      );
+    });
+
+    const retval = [];
+    for(let i = 0; i < obj.length/2; i++){
+      retval.push(<div className="columns">{info_list[2*i]} {info_list[2*i+1]} </div>);
+    }
+    if(obj.length % 2 === 1){
+      retval.push(<div className="columns">{info_list[obj.length-1]}</div>);
+    }
+
+    return retval;
+  }
+
   render() {
     const { profile } = this.state;
+    // const test = "{\"name\":\"Shanghai Cafe\",\"rating\":\"3.0 star rating\",\"count\":\"183 reviews\",\"phone\":\"(858) 452-6888\",\"image\":\"https://s3-media2.fl.yelpcdn.com/bphoto/3uFx5Hzt9ZJNeVMLTpUAAg/ls.jpg\",\"identifier\":\"/biz/shanghai-cafe-san-diego\",\"keywords\":[\"Chinese\"],\"matching\":\"Shanghai Cafe Chinese\",\"confidence\":0.5454545454545454}"
+    // const to = JSON.parse(test);
     return (
     <div>
       <div className="wallpaper" id="search-wallpaper" data-image={wallimage}></div>
@@ -188,6 +266,15 @@ class Profile extends Component {
         </div>
         }
 
+        {this.state.fetched && this.state.number != 0 && 
+        <div className = "columns is-centered">
+          <div className = "column ">
+            <a className="button is-static">Search</a>
+            <input id="searchinput" className="input" onKeyPress={(e)=>this.sendSearchValue(e)} value={this.state.searchValue} onChange={(e)=>this.updateSearchValue(e)} type="text" placeholder="Please type in your search keyword"/>
+          </div>
+        </div>
+        }
+
         {this.state.fetched &&
         <div className = "columns is-centered">
           <div className = "column ">
@@ -196,13 +283,6 @@ class Profile extends Component {
         </div>
         }
 
-        {this.state.fetched && this.state.number != 0 && 
-        <div className = "columns is-centered">
-          <div className = "column ">
-            <h3>temp</h3>
-          </div>
-        </div>
-        }
         
         {this.state.loading &&
         <div className = "columns is-centered">
@@ -212,8 +292,23 @@ class Profile extends Component {
         </div>
         }
 
+      </div>
+      <div>
 
+        {this.state.info &&
+          this.renderInfo()        
+        }
 
+      <div className="search-header">
+        {this.state.fetched &&
+        <div className = "columns is-centered">
+          <div className = "column ">
+            <h3>Total <strong>{this.state.found} </strong> restaurants found</h3> 
+          </div>
+        </div>
+        }
+
+      </div>
       </div>
       </div>
     </div>

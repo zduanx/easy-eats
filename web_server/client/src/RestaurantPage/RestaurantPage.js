@@ -92,10 +92,10 @@ class RestaurantPage extends Component {
                   <div className="column is-4">
                     <h3> {this.state.info.rating}</h3>
                     <h3> {this.state.info.count}</h3>
-                    <h3> {this.state.info.website}</h3>
-                    <h3> {this.state.info.phone}</h3>
                   </div>
                   <div className="column is-4">
+                    <h3> {this.state.info.website}</h3>
+                    <h3> {this.state.info.phone}</h3>
                     {this.state.info.address.map((val)=> (<h3 key={Math.random()}> {val}</h3>))}
                     <a className="button is-danger yelp-button" href={this.state.info.url}><i className="fab fa-yelp"/>Yelp</a>
                   </div>
@@ -108,7 +108,7 @@ class RestaurantPage extends Component {
             <div className="columns">
               <div className="column is-7">
                 <h2> Review Highlights</h2>
-                {this.state.info.reviews.map((val)=> (<div key={Math.random()}><h3 className="yelp-review"> {val}</h3><hr/></div>))}
+                {this.state.info.reviews && this.state.info.reviews.map((val)=> (<div key={Math.random()}><h3 className="yelp-review"> {val}</h3><hr/></div>))}
               </div>
               <div className="column is-1"></div>
               <div className="column is-4">
@@ -125,13 +125,16 @@ class RestaurantPage extends Component {
                 <h2> Generics </h2>
                   {this.state.info.keywords.map((val)=> (<h3 key={Math.random()}> {val}</h3>))}
                 <br/>
+                {this.state.info.hours && 
+                  <div>
                 <h2> Hours </h2>
                 <table className="table">
                 <tbody>
                   {day.map((val, ind)=> (<tr key={ind}><td> {val}</td><td>{this.state.info.hours[ind]}</td></tr>))}
                 </tbody>
                 </table>
-
+                </div>
+                }
               </div>
             </div>
           </div>
