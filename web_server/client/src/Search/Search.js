@@ -61,7 +61,7 @@ class Profile extends Component {
   }
   
   loadLocation(profile){
-    const url = 'http://' + window.location.hostname + ':7000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/getuserlocation'
     
     const request = new Request(
@@ -126,7 +126,7 @@ class Profile extends Component {
 
   handleSearchValue(value){
     this.setState({loading: true, disable: true});
-    const url = 'http://' + window.location.hostname + ':4000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/search'
     
     const request = new Request(
@@ -166,7 +166,7 @@ class Profile extends Component {
 
 
   preloadDatabase(distance){
-    const url = 'http://' + window.location.hostname + ':4000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/preload'
     
     const request = new Request(

@@ -43,7 +43,7 @@ class RestaurantPage extends Component {
 
   loadRestuarantInfo(){
     const name = this.props.match.params.name;
-    const url = 'http://' + window.location.hostname + ':5000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/restaurants/' + name;
     const request = new Request(
       url,
@@ -97,7 +97,7 @@ class RestaurantPage extends Component {
                     <h3> {this.state.info.website}</h3>
                     <h3> {this.state.info.phone}</h3>
                     {this.state.info.address.map((val)=> (<h3 key={Math.random()}> {val}</h3>))}
-                    <a className="button is-danger yelp-button" href={this.state.info.url}><i className="fab fa-yelp"/>Yelp</a>
+                    <a className="button is-danger yelp-button" href={this.state.info.url} target="_blank"><i className="fab fa-yelp"/>Yelp</a>
                   </div>
                   <div className="column is-4">
                   </div>

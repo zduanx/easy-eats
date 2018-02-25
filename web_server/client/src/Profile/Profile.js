@@ -56,7 +56,7 @@ class Profile extends Component {
   }
 
   loadLocation(profile){
-    const url = 'http://' + window.location.hostname + ':7000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/getuserlocation'
     
     const request = new Request(
@@ -97,7 +97,7 @@ class Profile extends Component {
   queryLocation(){
     const loc = this.state.inputValue;
 
-    const url = 'http://' + window.location.hostname + ':4000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/geoencode?location=' + loc;
     
     const request = new Request(
@@ -125,7 +125,7 @@ class Profile extends Component {
 
   registerLocation(info){
     info["email"] = this.state.profile.email;
-    const url = 'http://' + window.location.hostname + ':7000' +
+    const url = 'http://' + window.location.hostname + ':4200' +
                 '/userlocation'
     
     const request = new Request(
