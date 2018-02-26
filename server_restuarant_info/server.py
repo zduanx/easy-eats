@@ -50,7 +50,7 @@ def handle_invalid_usage(error):
 
 @app.route('/')
 def hello():
-    return 'hello world'
+    return 'hello world rest info'
 
 @app.route('/restaurants/<id>', methods=['GET'])
 def get_restuarant_info(id):

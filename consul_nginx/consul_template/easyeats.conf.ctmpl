@@ -1,0 +1,41 @@
+upstream user {
+    {{range service "user"}}
+    server {{.Address}}:{{.Port}};{{end}}
+}
+
+upstream geo {
+    {{range service "geo"}}
+    server {{.Address}}:{{.Port}};{{end}}
+}
+
+upstream restinfo {
+    {{range service "restinfo"}}
+    server {{.Address}}:{{.Port}};{{end}}
+}
+
+server {
+  listen 80;
+  server_name user;
+  
+  location / {
+    proxy_pass http://user;
+  }
+}
+
+server {
+  listen 80;
+  server_name restinfo;
+
+  location / {
+    proxy_pass http://restinfo;
+  }
+}
+
+server {
+  listen 80;
+  server_name geo;
+
+  location / {
+    proxy_pass http://geo;
+  }
+}
