@@ -1,2 +1,1 @@
-# food-recommendation
-food recommendation system
+# Easy eats: location-based restaurants search system
